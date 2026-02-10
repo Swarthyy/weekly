@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4f2ed;
+  --bg-card: #eae8e2;
+  --bg-input: #fff;
+  --bg-dark: #2a2825;
+  --text: #2a2825;
+  --text-mid: #57534e;
+  --text-muted: #7a7670;
+  --text-light: #a8a29e;
+  --accent: #b5503a;
+  --accent-hover: #9e4432;
+  --accent-soft: rgba(181, 80, 58, 0.07);
+  --accent-glow: rgba(181, 80, 58, 0.15);
+  --green: #5a7a5e;
+  --green-soft: rgba(90, 122, 94, 0.1);
+  --amber: #a68a3e;
+  --amber-soft: rgba(166, 138, 62, 0.1);
+  --red-soft: rgba(181, 80, 58, 0.08);
+  --border: #d9d5cd;
+  --border-light: #e8e5de;
+  --serif: 'EB Garamond', Georgia, serif;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --radius: 8px;
+  --shadow-sm: 0 1px 3px rgba(42,40,37,0.06);
+  --shadow-md: 0 4px 16px rgba(42,40,37,0.08);
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--serif);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: #fff; }
+
+/* ============ APP SHELL ============ */
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  background: var(--bg);
+}
+
+/* ============ SCREENS ============ */
+.screen {
+  display: none;
+  padding: 0 24px 120px;
+  animation: screenIn 0.4s ease-out;
+}
+.screen.active { display: block; }
+
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ ONBOARDING ============ */
+.onboard-screen {
+  display: none;
+  min-height: 100vh;
+  padding: 0 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  animation: screenIn 0.5s ease-out;
+}
+.onboard-screen.active { display: flex; }
+
+.onboard-logo {
+  font-family: var(--serif);
+  font-size: 2.8rem;
+  font-style: italic;
+  color: var(--accent);
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+}
+
+.onboard-tagline {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  max-width: 300px;
+  line-height: 1.55;
+  margin-bottom: 48px;
+}
+
+.onboard-content {
+  width: 100%;
+  max-width: 380px;
+  text-align: left;
+}
+
+.onboard-content h2 {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.onboard-content p {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  line-height: 1.55;
+}
+
+.onboard-quote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--text-mid);
+  border-left: 2px solid var(--accent);
+  padding-left: 20px;
+  margin: 32px 0;
+  line-height: 1.6;
+}
+
+.onboard-principles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 20px 0 32px;
+}
+
+.onboard-principle {
+  background: var(--bg-card);
+  padding: 12px 14px;
+  border-radius: 6px;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  color: var(--text-mid);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.onboard-principle .arrow {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+}
+
+/* ============ SECTOR SETUP ============ */
+.sector-setup-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.sector-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+
+.sector-chip:hover { border-color: var(--border); }
+
+.sector-chip .left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sector-chip .icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  background: var(--accent-soft);
+}
+
+.sector-chip .name {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.sector-chip .check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  color: transparent;
+  transition: var(--transition);
+}
+
+.sector-chip.selected .check {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ============ BUTTONS ============ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 14px 28px;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 100%;
+}
+
+.btn-primary {
+  background: var(--bg-dark);
+  color: #fff;
+}
+.btn-primary:hover { background: #1a1815; }
+.btn-primary:disabled {
+  background: var(--border);
+  color: var(--text-light);
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { border-color: var(--text-muted); color: var(--text); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  padding: 10px 16px;
+  font-size: 0.75rem;
+}
+.btn-ghost:hover { color: var(--accent); }
+
+/* ============ TOP BAR ============ */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 100;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.top-bar-logo {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--accent);
+}
+
+.top-bar-week {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--text-light);
+  text-transform: uppercase;
+}
+
+/* ============ NAV BAR ============ */
+.nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  z-index: 200;
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 0 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  background: none;
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  color: var(--text-light);
+}
+
+.nav-item.active { color: var(--accent); }
+.nav-item:hover { color: var(--text-mid); }
+
+.nav-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* ============ REVIEW SCREEN ============ */
+.review-header {
+  padding: 28px 0 20px;
+}
+
+.review-header h1 {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.review-header .date-range {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-light);
+  letter-spacing: 0.05em;
+}
+
+.review-progress {
+  display: flex;
+  gap: 4px;
+  margin: 20px 0 28px;
+}
+
+.review-progress .pip {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: var(--transition);
+}
+.review-progress .pip.done { background: var(--accent); }
+.review-progress .pip.current { background: var(--accent); opacity: 0.5; }
+
+/* Sector review card */
+.sector-review {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 16px;
+  animation: screenIn 0.3s ease-out;
+}
+
+.sector-review-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.sector-review-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  background: var(--accent-soft);
+}
+
+.sector-review-name {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.sector-review-desc {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.guiding-q {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--text-mid);
+  margin-bottom: 12px;
+  padding-left: 12px;
+  border-left: 2px solid var(--border);
+}
+
+textarea.reflection-input {
+  width: 100%;
+  min-height: 100px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-input);
+  font-family: var(--serif);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text);
+  resize: vertical;
+  outline: none;
+  transition: var(--transition);
+}
+
+textarea.reflection-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+textarea.reflection-input::placeholder {
+  color: var(--text-light);
+  font-style: italic;
+}
+
+.input-methods {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.input-method-btn {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.input-method-btn:hover { border-color: var(--text-muted); }
+.input-method-btn.active { background: var(--bg-dark); color: #fff; border-color: var(--bg-dark); }
+
+/* ============ AI SCORING ============ */
+.scoring-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 12px;
+  animation: screenIn 0.35s ease-out;
+}
+
+.scoring-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.scoring-sector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scoring-sector .icon {
+  font-size: 0.9rem;
+}
+
+.scoring-sector .name {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.scoring-value {
+  font-family: var(--mono);
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.scoring-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.scoring-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scoring-rationale {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* ============ WEEKLY SUMMARY ============ */
+.summary-section {
+  margin-bottom: 20px;
+}
+
+.summary-label {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.summary-content {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+
+.summary-content p {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text-mid);
+}
+
+.overall-score-display {
+  text-align: center;
+  padding: 32px 0;
+}
+
+.overall-score-number {
+  font-family: var(--mono);
+  font-size: 3.5rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.overall-score-label {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  color: var(--text-light);
+  margin-top: 8px;
+  letter-spacing: 0.05em;
+}
+
+.lock-warning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--amber-soft);
+  padding: 14px 16px;
+  border-radius: 6px;
+  margin: 20px 0;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  color: var(--amber);
+}
+
+/* ============ TIMELINE SCREEN ============ */
+.timeline-header {
+  padding: 28px 0 16px;
+}
+
+.timeline-header h1 {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.timeline-week {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+.timeline-week:hover { border-color: var(--border); }
+
+.timeline-week-num {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--text-light);
+  width: 48px;
+  flex-shrink: 0;
+  letter-spacing: 0.05em;
+}
+
+.timeline-week-info {
+  flex: 1;
+}
+
+.timeline-week-title {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.timeline-week-dates {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--text-light);
+}
+
+.timeline-week-score {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  color: var(--accent);
+  font-weight: 500;
+  margin-left: 12px;
+}
+
+.timeline-trend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+}
+.timeline-trend.up { color: var(--green); }
+.timeline-trend.down { color: var(--accent); }
+.timeline-trend.flat { color: var(--text-light); }
+
+/* ============ DASHBOARD SCREEN ============ */
+.dash-header {
+  padding: 28px 0 20px;
+}
+
+.dash-header h1 {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.dash-header p {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.chart-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 14px;
+}
+
+.chart-label {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 14px;
+}
+
+.mini-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 80px;
+}
+
+.mini-chart .bar {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.mini-chart .bar .val {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  color: var(--text-light);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.mini-chart .bar:hover .val { opacity: 1; }
+
+.mini-chart .bar-week-label {
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 0.45rem;
+  color: var(--text-light);
+  white-space: nowrap;
+}
+
+.sparkline-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.sparkline-row:last-child { border-bottom: none; }
+
+.sparkline-label {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--text-mid);
+}
+
+.sparkline-value {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+.sparkline-delta {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  margin-left: 6px;
+}
+.sparkline-delta.up { color: var(--green); }
+.sparkline-delta.down { color: var(--accent); }
+
+/* ============ IDENTITY SNAPSHOT ============ */
+.snapshot-card {
+  background: var(--bg-dark);
+  color: #e8e5de;
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-top: 20px;
+}
+
+.snapshot-card .snap-label {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 16px;
+}
+
+.snapshot-item {
+  margin-bottom: 14px;
+}
+
+.snapshot-item .item-label {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  color: #8a8680;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.snapshot-item p {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: #ccc8c0;
+}
+
+/* ============ CHATGPT BRIDGE ============ */
+.bridge-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 12px;
+}
+.bridge-btn:hover { border-color: var(--text-muted); color: var(--text); }
+
+/* ============ UTILITY ============ */
+.spacer { height: 16px; }
+.spacer-lg { height: 32px; }
+
+.fade-label {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 12px;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: 24px 0;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .app { max-width: 100%; }
+  .onboard-principles { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ==================== ONBOARDING 1: WELCOME ==================== -->
+  <div class="onboard-screen active" id="onboard-welcome">
+    <div class="onboard-logo">Weekly</div>
+    <p class="onboard-tagline">Replace vague "rolling life" with discrete, graded weeks that compound into long-term self-awareness.</p>
+    <div class="onboard-content">
+      <div class="onboard-principles">
+        <div class="onboard-principle"><span class="arrow">→</span> Week > Day</div>
+        <div class="onboard-principle"><span class="arrow">→</span> Judgment > Tracking</div>
+        <div class="onboard-principle"><span class="arrow">→</span> Trends > Perfection</div>
+        <div class="onboard-principle"><span class="arrow">→</span> No dopamine mechanics</div>
+      </div>
+      <button class="btn btn-primary" onclick="showScreen('onboard-sectors')">Begin Setup</button>
+    </div>
+  </div>
+
+  <!-- ==================== ONBOARDING 2: SECTOR SETUP ==================== -->
+  <div class="onboard-screen" id="onboard-sectors">
+    <div class="onboard-content" style="text-align:left; max-width:400px;">
+      <h2>Define Your Life Sectors</h2>
+      <p>Select the domains you want to evaluate yourself across each week. You'll define what excellence and failure look like for each.</p>
+
+      <div class="sector-setup-list" id="sectorList">
+        <div class="sector-chip selected" onclick="toggleSector(this)">
+          <div class="left"><div class="icon">💪</div><div class="name">Health</div></div>
+          <div class="check">✓</div>
+        </div>
+        <div class="sector-chip selected" onclick="toggleSector(this)">
+          <div class="left"><div class="icon">🏋️</div><div class="name">Gym / Training</div></div>
+          <div class="check">✓</div>
+        </div>
+        <div class="sector-chip selected" onclick="toggleSector(this)">
+          <div class="left"><div class="icon">💼</div><div class="name">Work / Income</div></div>
+          <div class="check">✓</div>
+        </div>
+        <div class="sector-chip selected" onclick="toggleSector(this)">
+          <div class="left"><div class="icon">📚</div><div class="name">Learning</div></div>
+          <div class="check">✓</div>
+        </div>
+        <div class="sector-chip" onclick="toggleSector(this)">
+          <div class="left"><div class="icon">❤️</div><div class="name">Relationships</div></div>
+          <div class="check">✓</div>
+        </div>
+        <div class="sector-chip selected" onclick="toggleSector(this)">
+          <div class="left"><div class="icon">🎨</div><div class="name">Creativity</div></div>
+          <div class="check">✓</div>
+        </div>
+        <div class="sector-chip" onclick="toggleSector(this)">
+          <div class="left"><div class="icon">⚡</div><div class="name">Discipline</div></div>
+          <div class="check">✓</div>
+        </div>
+        <div class="sector-chip" onclick="toggleSector(this)">
+          <div class="left"><div class="icon">🧘</div><div class="name">Spiritual / Mental</div></div>
+          <div class="check">✓</div>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="showScreen('onboard-ritual')">Continue</button>
+      <div class="spacer"></div>
+      <button class="btn btn-ghost" onclick="showScreen('onboard-welcome')">← Back</button>
+    </div>
+  </div>
+
+  <!-- ==================== ONBOARDING 3: RITUAL ==================== -->
+  <div class="onboard-screen" id="onboard-ritual">
+    <div class="onboard-content" style="text-align:left; max-width:400px;">
+      <h2>The Review Ritual</h2>
+      <p>Every week, you'll reflect on each sector, receive an AI evaluation, and lock your scores into a permanent record.</p>
+
+      <div style="margin: 24px 0; display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; align-items:flex-start; gap:10px;">
+          <span style="font-family:var(--mono);font-size:0.6rem;color:var(--accent);margin-top:3px;">01</span>
+          <span style="font-family:var(--sans);font-size:0.8rem;color:var(--text-mid);">Reviews happen weekly on your chosen day</span>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:10px;">
+          <span style="font-family:var(--mono);font-size:0.6rem;color:var(--accent);margin-top:3px;">02</span>
+          <span style="font-family:var(--sans);font-size:0.8rem;color:var(--text-mid);">Reviews are locked once submitted</span>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:10px;">
+          <span style="font-family:var(--mono);font-size:0.6rem;color:var(--accent);margin-top:3px;">03</span>
+          <span style="font-family:var(--sans);font-size:0.8rem;color:var(--text-mid);">Scores matter over time, not week-to-week</span>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:10px;">
+          <span style="font-family:var(--mono);font-size:0.6rem;color:var(--accent);margin-top:3px;">04</span>
+          <span style="font-family:var(--sans);font-size:0.8rem;color:var(--text-mid);">This is a long-term system</span>
+        </div>
+      </div>
+
+      <div class="onboard-quote">"This works if you're honest. It doesn't work if you perform."</div>
+
+      <button class="btn btn-primary" onclick="enterApp()">Start Week 7</button>
+      <div class="spacer"></div>
+      <button class="btn btn-ghost" onclick="showScreen('onboard-sectors')">← Back</button>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN APP: TOP BAR ==================== -->
+  <div id="app-chrome" style="display:none;">
+    <div class="top-bar">
+      <div class="top-bar-logo">Weekly</div>
+      <div class="top-bar-week">Week 7 · 2026</div>
+    </div>
+
+    <!-- ==================== REVIEW TAB ==================== -->
+    <div class="screen active" id="screen-review">
+      <div class="review-header">
+        <h1>Week 7 Review</h1>
+        <div class="date-range">Feb 3 – Feb 9, 2026</div>
+      </div>
+
+      <!-- Progress pips -->
+      <div class="review-progress" id="reviewProgress">
+        <div class="pip done"></div>
+        <div class="pip done"></div>
+        <div class="pip current"></div>
+        <div class="pip"></div>
+        <div class="pip"></div>
+      </div>
+
+      <!-- STEP: Objective Inputs -->
+      <div id="review-step-obj" class="review-step active">
+        <div class="fade-label">Objective Inputs</div>
+        <div class="chart-card">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div>
+              <div style="font-family:var(--mono);font-size:0.5rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Weight</div>
+              <div style="font-family:var(--mono);font-size:1.3rem;color:var(--text);">84.2 <span style="font-size:0.6rem;color:var(--text-light);">kg</span></div>
+              <div class="sparkline-delta down">-0.4</div>
+            </div>
+            <div>
+              <div style="font-family:var(--mono);font-size:0.5rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Training</div>
+              <div style="font-family:var(--mono);font-size:1.3rem;color:var(--text);">4 <span style="font-size:0.6rem;color:var(--text-light);">sessions</span></div>
+              <div class="sparkline-delta up">+1</div>
+            </div>
+            <div>
+              <div style="font-family:var(--mono);font-size:0.5rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Avg Sleep</div>
+              <div style="font-family:var(--mono);font-size:1.3rem;color:var(--text);">7.1 <span style="font-size:0.6rem;color:var(--text-light);">hrs</span></div>
+              <div class="sparkline-delta up">+0.3</div>
+            </div>
+            <div>
+              <div style="font-family:var(--mono);font-size:0.5rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Screen Time</div>
+              <div style="font-family:var(--mono);font-size:1.3rem;color:var(--text);">4.8 <span style="font-size:0.6rem;color:var(--text-light);">hrs/d</span></div>
+              <div class="sparkline-delta down">-0.6</div>
+            </div>
+          </div>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn btn-primary" onclick="goReviewStep('reflect')">Continue to Reflection →</button>
+      </div>
+
+      <!-- STEP: Reflection -->
+      <div id="review-step-reflect" class="review-step" style="display:none;">
+        <div class="fade-label">Sector Reflection</div>
+
+        <div class="sector-review">
+          <div class="sector-review-header">
+            <div class="sector-review-icon">💪</div>
+            <div>
+              <div class="sector-review-name">Health</div>
+              <div class="sector-review-desc">Physical wellbeing, energy, recovery</div>
+            </div>
+          </div>
+          <div class="guiding-q">How did your body feel this week? Did you honor it or push through signals?</div>
+          <textarea class="reflection-input" placeholder="Write your reflection...">Sleep improved after cutting caffeine past 2pm. Energy was consistently better in the mornings. Weight trending down but not forcing it — eating well, not restricting. One poor night Wednesday after late screen time.</textarea>
+          <div class="input-methods">
+            <button class="input-method-btn active">✍️ Text</button>
+            <button class="input-method-btn">🎙 Voice</button>
+          </div>
+        </div>
+
+        <div class="sector-review">
+          <div class="sector-review-header">
+            <div class="sector-review-icon">🏋️</div>
+            <div>
+              <div class="sector-review-name">Gym / Training</div>
+              <div class="sector-review-desc">Strength, consistency, progressive overload</div>
+            </div>
+          </div>
+          <div class="guiding-q">Did you follow the program? Any PRs? Any sessions skipped?</div>
+          <textarea class="reflection-input" placeholder="Write your reflection...">Hit 4 sessions — best week in a month. Squat felt strong, hit 140kg for a clean triple. Skipped nothing. Bench is still lagging but added 2.5kg from last week. Recovery felt adequate.</textarea>
+          <div class="input-methods">
+            <button class="input-method-btn active">✍️ Text</button>
+            <button class="input-method-btn">🎙 Voice</button>
+          </div>
+        </div>
+
+        <div class="sector-review">
+          <div class="sector-review-header">
+            <div class="sector-review-icon">💼</div>
+            <div>
+              <div class="sector-review-name">Work / Income</div>
+              <div class="sector-review-desc">Output quality, progress on key projects</div>
+            </div>
+          </div>
+          <textarea class="reflection-input" placeholder="Write your reflection...">Productive but scattered. Shipped the API integration but the product doc is still half-done. Got pulled into two unplanned meetings. Need to protect deep work blocks better. Revenue stable.</textarea>
+          <div class="input-methods">
+            <button class="input-method-btn active">✍️ Text</button>
+            <button class="input-method-btn">🎙 Voice</button>
+          </div>
+        </div>
+
+        <div class="sector-review">
+          <div class="sector-review-header">
+            <div class="sector-review-icon">📚</div>
+            <div>
+              <div class="sector-review-name">Learning</div>
+              <div class="sector-review-desc">Deliberate growth, reading, skill building</div>
+            </div>
+          </div>
+          <textarea class="reflection-input" placeholder="Write your reflection...">Finished two chapters of the systems design book. No dedicated study sessions though — all was squeezed into commute time. Want to establish a proper 30-min learning block.</textarea>
+          <div class="input-methods">
+            <button class="input-method-btn active">✍️ Text</button>
+            <button class="input-method-btn">🎙 Voice</button>
+          </div>
+        </div>
+
+        <div class="sector-review">
+          <div class="sector-review-header">
+            <div class="sector-review-icon">🎨</div>
+            <div>
+              <div class="sector-review-name">Creativity</div>
+              <div class="sector-review-desc">Making things, expression, side projects</div>
+            </div>
+          </div>
+          <textarea class="reflection-input" placeholder="Write your reflection...">Wrote one short piece on Sunday. Felt good to create without pressure. Haven't touched the music project in two weeks though. Creativity is alive but undirected.</textarea>
+          <div class="input-methods">
+            <button class="input-method-btn active">✍️ Text</button>
+            <button class="input-method-btn">🎙 Voice</button>
+          </div>
+        </div>
+
+        <div class="spacer"></div>
+        <button class="btn btn-primary" onclick="goReviewStep('scoring')">Generate AI Evaluation →</button>
+        <div class="spacer"></div>
+        <button class="btn btn-ghost" onclick="goReviewStep('obj')">← Back to Inputs</button>
+      </div>
+
+      <!-- STEP: AI Scoring -->
+      <div id="review-step-scoring" class="review-step" style="display:none;">
+        <div class="fade-label">AI Evaluation — Week 7</div>
+
+        <div id="scoringCards"></div>
+
+        <div class="spacer-lg"></div>
+        <button class="btn btn-primary" onclick="goReviewStep('summary')">View Weekly Summary →</button>
+        <div class="spacer"></div>
+        <button class="btn btn-ghost" onclick="goReviewStep('reflect')">← Edit Reflections</button>
+      </div>
+
+      <!-- STEP: Summary & Lock -->
+      <div id="review-step-summary" class="review-step" style="display:none;">
+        <div class="overall-score-display">
+          <div class="overall-score-number">7.0</div>
+          <div class="overall-score-label">Overall Week Score</div>
+        </div>
+
+        <div class="summary-section">
+          <div class="summary-label">Facts</div>
+          <div class="summary-content">
+            <p>4 training sessions completed (best in 4 weeks). Weight down 0.4kg to 84.2kg. Sleep averaged 7.1 hours (+0.3). Screen time reduced to 4.8 hrs/day. API integration shipped. Product doc remains incomplete.</p>
+          </div>
+        </div>
+
+        <div class="summary-section">
+          <div class="summary-label">Patterns</div>
+          <div class="summary-content">
+            <p>Physical discipline continues its upward trend — this is the third consecutive week of improvement in training consistency. Work output remains high but scattered; the "reactive meetings" pattern from Week 5 persists. Creativity shows up only when there's no pressure, suggesting it needs protected space, not motivation.</p>
+          </div>
+        </div>
+
+        <div class="summary-section">
+          <div class="summary-label">Open Loop</div>
+          <div class="summary-content">
+            <p>The product doc is becoming a recurring avoidance pattern. It's been mentioned in 3 of the last 4 reviews. This is the week's primary unresolved item and may indicate resistance to the project itself, not just time constraints.</p>
+          </div>
+        </div>
+
+        <div class="lock-warning">
+          <span>⚠</span>
+          <span>Once submitted, this week's review is permanently locked and cannot be edited.</span>
+        </div>
+
+        <button class="btn btn-primary" onclick="lockWeek()">Lock & Submit Week 7</button>
+        <div class="spacer"></div>
+        <button class="bridge-btn" onclick="copyBridge()">
+          <span>📋</span> Discuss this week in ChatGPT
+        </button>
+        <div class="spacer"></div>
+        <button class="btn btn-ghost" onclick="goReviewStep('scoring')">← Back to Scores</button>
+      </div>
+
+      <!-- LOCKED STATE -->
+      <div id="review-step-locked" class="review-step" style="display:none;">
+        <div style="text-align:center; padding:60px 0;">
+          <div style="font-size:2rem; margin-bottom:16px;">✓</div>
+          <h2 style="font-family:var(--serif); font-size:1.4rem; font-weight:400; margin-bottom:8px;">Week 7 Locked</h2>
+          <p style="font-family:var(--sans); font-size:0.8rem; color:var(--text-muted); max-width:280px; margin:0 auto;">Your review has been permanently archived. See you next Sunday.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TIMELINE TAB ==================== -->
+    <div class="screen" id="screen-timeline">
+      <div class="timeline-header">
+        <h1>Timeline</h1>
+      </div>
+
+      <div class="timeline-list">
+        <div class="timeline-week" style="opacity:0.5;border:1px dashed var(--border);">
+          <div class="timeline-week-num">W07</div>
+          <div class="timeline-week-info">
+            <div class="timeline-week-title" style="color:var(--text-muted);font-style:italic;">In progress...</div>
+            <div class="timeline-week-dates">Feb 3 – Feb 9</div>
+          </div>
+        </div>
+        <div class="timeline-week">
+          <div class="timeline-week-num">W06</div>
+          <div class="timeline-week-info">
+            <div class="timeline-week-title">Back on Track</div>
+            <div class="timeline-week-dates">Jan 27 – Feb 2</div>
+          </div>
+          <div class="timeline-week-score">6.8</div>
+          <div class="timeline-trend up">↑</div>
+        </div>
+        <div class="timeline-week">
+          <div class="timeline-week-num">W05</div>
+          <div class="timeline-week-info">
+            <div class="timeline-week-title">Scattered</div>
+            <div class="timeline-week-dates">Jan 20 – Jan 26</div>
+          </div>
+          <div class="timeline-week-score">5.4</div>
+          <div class="timeline-trend down">↓</div>
+        </div>
+        <div class="timeline-week">
+          <div class="timeline-week-num">W04</div>
+          <div class="timeline-week-info">
+            <div class="timeline-week-title">Steady Progress</div>
+            <div class="timeline-week-dates">Jan 13 – Jan 19</div>
+          </div>
+          <div class="timeline-week-score">6.6</div>
+          <div class="timeline-trend flat">→</div>
+        </div>
+        <div class="timeline-week">
+          <div class="timeline-week-num">W03</div>
+          <div class="timeline-week-info">
+            <div class="timeline-week-title">Finding Rhythm</div>
+            <div class="timeline-week-dates">Jan 6 – Jan 12</div>
+          </div>
+          <div class="timeline-week-score">6.4</div>
+          <div class="timeline-trend up">↑</div>
+        </div>
+        <div class="timeline-week">
+          <div class="timeline-week-num">W02</div>
+          <div class="timeline-week-info">
+            <div class="timeline-week-title">Slow Start</div>
+            <div class="timeline-week-dates">Dec 30 – Jan 5</div>
+          </div>
+          <div class="timeline-week-score">5.2</div>
+          <div class="timeline-trend down">↓</div>
+        </div>
+        <div class="timeline-week">
+          <div class="timeline-week-num">W01</div>
+          <div class="timeline-week-info">
+            <div class="timeline-week-title">First Week</div>
+            <div class="timeline-week-dates">Dec 23 – Dec 29</div>
+          </div>
+          <div class="timeline-week-score">5.8</div>
+          <div class="timeline-trend flat">—</div>
+        </div>
+      </div>
+
+      <!-- Identity Snapshot -->
+      <div class="snapshot-card">
+        <div class="snap-label">Identity Snapshot · Updated Week 6</div>
+        <div class="snapshot-item">
+          <div class="item-label">Current Priorities</div>
+          <p>Training consistency, protecting deep work blocks, establishing a learning routine.</p>
+        </div>
+        <div class="snapshot-item">
+          <div class="item-label">Dominant Strengths</div>
+          <p>Physical discipline is improving reliably. Sleep hygiene gains are holding. Work output is high when focused.</p>
+        </div>
+        <div class="snapshot-item">
+          <div class="item-label">Repeating Failures</div>
+          <p>Reactive meeting attendance. Product doc avoidance. Creative projects deprioritized under pressure.</p>
+        </div>
+        <div class="snapshot-item" style="margin-bottom:0;">
+          <div class="item-label">Primary Bottleneck</div>
+          <p>Inability to say no to unplanned interruptions. This cascades into lost deep work → unfinished deliverables → guilt → reduced creative energy.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== DASHBOARD TAB ==================== -->
+    <div class="screen" id="screen-dashboard">
+      <div class="dash-header">
+        <h1>Dashboard</h1>
+        <p>Raw data over weeks. No advice. No alerts.</p>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-label">Overall Score — 6 Weeks</div>
+        <div class="mini-chart" id="chartScores" style="margin-bottom:24px;"></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-label">Weight (kg)</div>
+        <div class="sparkline-row">
+          <span class="sparkline-label">Current</span>
+          <span><span class="sparkline-value">84.2</span><span class="sparkline-delta down"> -0.4</span></span>
+        </div>
+        <div class="sparkline-row">
+          <span class="sparkline-label">4-week avg</span>
+          <span class="sparkline-value">84.8</span>
+        </div>
+        <div class="sparkline-row">
+          <span class="sparkline-label">Start</span>
+          <span class="sparkline-value">86.1</span>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-label">Training Sessions / Week</div>
+        <div class="mini-chart" id="chartTraining" style="margin-bottom:24px;"></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-label">Sleep (hrs avg)</div>
+        <div class="sparkline-row">
+          <span class="sparkline-label">This week</span>
+          <span><span class="sparkline-value">7.1</span><span class="sparkline-delta up"> +0.3</span></span>
+        </div>
+        <div class="sparkline-row">
+          <span class="sparkline-label">6-week avg</span>
+          <span class="sparkline-value">6.7</span>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-label">Sector Trends — 6 Weeks</div>
+        <div style="display:flex; flex-direction:column; gap:12px; margin-top:4px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:0.8rem;">💪</span>
+            <span style="font-family:var(--sans);font-size:0.78rem;flex:1;">Health</span>
+            <div style="flex:2;height:4px;background:var(--border);border-radius:2px;overflow:hidden;"><div style="width:72%;height:100%;background:var(--green);border-radius:2px;"></div></div>
+            <span style="font-family:var(--mono);font-size:0.7rem;color:var(--green);width:28px;text-align:right;">7.2</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:0.8rem;">🏋️</span>
+            <span style="font-family:var(--sans);font-size:0.78rem;flex:1;">Gym</span>
+            <div style="flex:2;height:4px;background:var(--border);border-radius:2px;overflow:hidden;"><div style="width:78%;height:100%;background:var(--green);border-radius:2px;"></div></div>
+            <span style="font-family:var(--mono);font-size:0.7rem;color:var(--green);width:28px;text-align:right;">7.8</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:0.8rem;">💼</span>
+            <span style="font-family:var(--sans);font-size:0.78rem;flex:1;">Work</span>
+            <div style="flex:2;height:4px;background:var(--border);border-radius:2px;overflow:hidden;"><div style="width:65%;height:100%;background:var(--amber);border-radius:2px;"></div></div>
+            <span style="font-family:var(--mono);font-size:0.7rem;color:var(--amber);width:28px;text-align:right;">6.5</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:0.8rem;">📚</span>
+            <span style="font-family:var(--sans);font-size:0.78rem;flex:1;">Learning</span>
+            <div style="flex:2;height:4px;background:var(--border);border-radius:2px;overflow:hidden;"><div style="width:58%;height:100%;background:var(--amber);border-radius:2px;"></div></div>
+            <span style="font-family:var(--mono);font-size:0.7rem;color:var(--amber);width:28px;text-align:right;">5.8</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:0.8rem;">🎨</span>
+            <span style="font-family:var(--sans);font-size:0.78rem;flex:1;">Creativity</span>
+            <div style="flex:2;height:4px;background:var(--border);border-radius:2px;overflow:hidden;"><div style="width:60%;height:100%;background:var(--amber);border-radius:2px;"></div></div>
+            <span style="font-family:var(--mono);font-size:0.7rem;color:var(--amber);width:28px;text-align:right;">6.0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== NAV BAR ==================== -->
+    <div class="nav-bar">
+      <button class="nav-item active" onclick="switchTab('review')" id="nav-review">
+        <span class="nav-icon">✍️</span>
+        Review
+      </button>
+      <button class="nav-item" onclick="switchTab('timeline')" id="nav-timeline">
+        <span class="nav-icon">📋</span>
+        Timeline
+      </button>
+      <button class="nav-item" onclick="switchTab('dashboard')" id="nav-dashboard">
+        <span class="nav-icon">📊</span>
+        Dashboard
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ====== NAVIGATION ======
+function showScreen(id) {
+  document.querySelectorAll('.onboard-screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function enterApp() {
+  document.querySelectorAll('.onboard-screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('app-chrome').style.display = 'block';
+  buildCharts();
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('screen-' + tab).classList.add('active');
+  document.getElementById('nav-' + tab).classList.add('active');
+  if (tab === 'dashboard') buildCharts();
+}
+
+function toggleSector(el) {
+  el.classList.toggle('selected');
+}
+
+// ====== REVIEW FLOW ======
+const steps = ['obj', 'reflect', 'scoring', 'summary', 'locked'];
+
+function goReviewStep(step) {
+  document.querySelectorAll('.review-step').forEach(s => s.style.display = 'none');
+  document.getElementById('review-step-' + step).style.display = 'block';
+
+  // Update progress pips
+  const idx = steps.indexOf(step);
+  const pips = document.querySelectorAll('#reviewProgress .pip');
+  pips.forEach((p, i) => {
+    p.className = 'pip';
+    if (i < idx) p.classList.add('done');
+    if (i === idx) p.classList.add('current');
+  });
+
+  if (step === 'scoring') renderScoring();
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ====== AI SCORING ======
+const sectorScores = [
+  { icon: '💪', name: 'Health', score: 7.5, rationale: 'Sleep improved, weight trending in the right direction. One poor night doesn\'t break the pattern — consistency is there.' },
+  { icon: '🏋️', name: 'Gym / Training', score: 8.0, rationale: 'Best training week in a month. 4 sessions, squat PR, progressive overload on bench. This is what your 10/10 definition starts to approach.' },
+  { icon: '💼', name: 'Work / Income', score: 6.0, rationale: 'Good output on the API integration, but the product doc avoidance is a recurring pattern. Reactive meetings continue to fragment focus.' },
+  { icon: '📚', name: 'Learning', score: 5.5, rationale: 'Some reading happened, but no deliberate study sessions. Learning is being squeezed in, not prioritized. Below your stated standard.' },
+  { icon: '🎨', name: 'Creativity', score: 6.0, rationale: 'One writing session is better than zero. But the music project has been dormant for two weeks. Creativity needs protected space, which you didn\'t create.' }
+];
+
+function renderScoring() {
+  const container = document.getElementById('scoringCards');
+  container.innerHTML = '';
+
+  sectorScores.forEach((s, i) => {
+    setTimeout(() => {
+      const card = document.createElement('div');
+      card.className = 'scoring-card';
+      card.innerHTML = `
+        <div class="scoring-header">
+          <div class="scoring-sector">
+            <span class="icon">${s.icon}</span>
+            <span class="name">${s.name}</span>
+          </div>
+          <div class="scoring-value">${s.score}</div>
+        </div>
+        <div class="scoring-bar"><div class="scoring-bar-fill" style="width:0%"></div></div>
+        <div class="scoring-rationale">${s.rationale}</div>
+      `;
+      container.appendChild(card);
+
+      // Animate bar
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          card.querySelector('.scoring-bar-fill').style.width = (s.score * 10) + '%';
+        });
+      });
+    }, i * 200);
+  });
+}
+
+function lockWeek() {
+  goReviewStep('locked');
+  // Update timeline W07
+  setTimeout(() => {
+    const w7 = document.querySelector('.timeline-week:first-child');
+    w7.style.opacity = '1';
+    w7.style.border = '1px solid transparent';
+    w7.innerHTML = `
+      <div class="timeline-week-num">W07</div>
+      <div class="timeline-week-info">
+        <div class="timeline-week-title">Strong Foundation</div>
+        <div class="timeline-week-dates">Feb 3 – Feb 9</div>
+      </div>
+      <div class="timeline-week-score">7.0</div>
+      <div class="timeline-trend up">↑</div>
+    `;
+  }, 300);
+}
+
+function copyBridge() {
+  const text = `--- WEEKLY REVIEW: Week 7 (Feb 3-9, 2026) ---
+
+IDENTITY SNAPSHOT:
+- Priorities: Training consistency, protecting deep work blocks, establishing learning routine
+- Strengths: Physical discipline improving, sleep hygiene holding, high work output when focused
+- Failures: Reactive meetings, product doc avoidance, creativity deprioritized under pressure
+- Bottleneck: Inability to say no to unplanned interruptions
+
+WEEK 7 SUMMARY:
+Overall: 7.0/10
+Health: 7.5 | Gym: 8.0 | Work: 6.0 | Learning: 5.5 | Creativity: 6.0
+
+Facts: 4 training sessions, weight down 0.4kg, sleep up 0.3hrs, screen time down.
+Patterns: Physical discipline trending up (3rd consecutive week). Work scattered by reactive meetings (persistent since W5). Creativity only appears without pressure.
+Open Loop: Product doc avoidance (mentioned in 3 of last 4 reviews).
+
+---
+Please discuss this week with me. Challenge my self-assessment, surface blind spots, and help me think about what to prioritize in Week 8.`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.bridge-btn');
+    btn.innerHTML = '<span>✓</span> Copied to clipboard';
+    btn.style.color = 'var(--green)';
+    btn.style.borderColor = 'var(--green)';
+    setTimeout(() => {
+      btn.innerHTML = '<span>📋</span> Discuss this week in ChatGPT';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 2000);
+  });
+}
+
+// ====== CHARTS ======
+function buildCharts() {
+  buildBarChart('chartScores', [5.8, 5.2, 6.4, 6.6, 5.4, 6.8], ['W1','W2','W3','W4','W5','W6'], 10, 'var(--accent)');
+  buildBarChart('chartTraining', [3, 2, 3, 3, 2, 3], ['W1','W2','W3','W4','W5','W6'], 5, 'var(--green)');
+}
+
+function buildBarChart(containerId, data, labels, max, color) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  data.forEach((val, i) => {
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.background = color;
+    bar.style.height = '0%';
+    bar.innerHTML = `<span class="val">${val}</span><span class="bar-week-label">${labels[i]}</span>`;
+    container.appendChild(bar);
+    setTimeout(() => {
+      bar.style.height = Math.max((val / max) * 100, 8) + '%';
+    }, 100 + i * 80);
+  });
+}
+</script>
+
+</body>
+</html>

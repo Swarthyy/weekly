@@ -75,6 +75,7 @@ Notes:
 
 ## GitHub Push Workflow
 - `npm run sync:github` stages all tracked changes, commits with a timestamp message, and pushes `main`.
+- Auto-push is enabled locally via `core.hooksPath=.githooks` and `.githooks/post-commit`, so every commit will push to `origin/<current-branch>`.
 - Optional custom message:
 ```bash
 powershell -ExecutionPolicy Bypass -File scripts/sync-github.ps1 -Message "feat: your message"

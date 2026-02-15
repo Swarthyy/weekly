@@ -114,8 +114,10 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: colors.bgCard,
-    borderRadius: radius.md,
+    borderRadius: radius.lg,
     padding: spacing.lg,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
   },
   fadeLabel: {
     fontFamily: fonts.mono,

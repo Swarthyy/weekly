@@ -307,8 +307,6 @@ export default function App() {
             <>
               <TopBar
                 weekLabel={`${topBarWeekLabel} · ${activeSectorCount} sectors`}
-                desktopMode={desktopMode}
-                onToggleDesktopMode={() => setDesktopMode((prev) => !prev)}
               />
               <View style={styles.screenContainer}>
                 {activeTab === "status" && (
@@ -380,6 +378,6 @@ const styles = StyleSheet.create({
   },
   screenContainer: {
     flex: 1,
-    paddingBottom: 96,
+    paddingBottom: 88,
   },
 });

@@ -63,10 +63,17 @@ export async function analyzeFoodPhoto(base64Image: string): Promise<{
   protein: number;
   confidence: number;
 }> {
+  // Extract media type from data-URI prefix if present
+  let mediaType = "";
+  const match = base64Image.match(/^data:(image\/[a-zA-Z+]+);base64,/);
+  if (match) {
+    mediaType = match[1];
+  }
+
   const response = await fetch(`${API_BASE}/api/food/analyze-image`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ base64Image }),
+    body: JSON.stringify({ base64Image, ...(mediaType ? { mediaType } : {}) }),
   });
   if (!response.ok) {
     throw new Error(`Food image analysis failed (${response.status})`);

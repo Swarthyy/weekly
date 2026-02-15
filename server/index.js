@@ -37,6 +37,37 @@ function getOpenAiApiKey() {
   return process.env.OPENAI_API_KEY || "";
 }
 
+/**
+ * Detect image media type from the first bytes of a base64-encoded string.
+ * Falls back to "image/jpeg" if the signature is unrecognised.
+ */
+function detectMediaTypeFromBytes(base64Str) {
+  const header = base64Str.slice(0, 16);
+  try {
+    const bytes = Buffer.from(header, "base64");
+    // PNG: 89 50 4E 47
+    if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47) {
+      return "image/png";
+    }
+    // GIF: 47 49 46
+    if (bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46) {
+      return "image/gif";
+    }
+    // WEBP: 52 49 46 46 ... 57 45 42 50
+    if (bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46 &&
+        bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50) {
+      return "image/webp";
+    }
+    // JPEG: FF D8 FF
+    if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
+      return "image/jpeg";
+    }
+  } catch {
+    // ignore decode errors
+  }
+  return "image/jpeg";
+}
+
 function getWithingsClientId() {
   return process.env.WITHINGS_CLIENT_ID || "";
 }
@@ -246,8 +277,22 @@ app.post("/api/food/analyze-text", async (req, res) => {
 });
 
 app.post("/api/food/analyze-image", async (req, res) => {
-  const base64Image = `${req.body?.base64Image || ""}`.trim();
-  if (!base64Image) return res.status(400).json({ error: "base64Image is required" });
+  const rawBase64 = `${req.body?.base64Image || ""}`.trim();
+  if (!rawBase64) return res.status(400).json({ error: "base64Image is required" });
+
+  // Detect media type from data-URI prefix, magic bytes, or explicit field
+  let mediaType = `${req.body?.mediaType || ""}`.trim();
+  let base64Data = rawBase64;
+
+  const dataUriMatch = rawBase64.match(/^data:(image\/[a-zA-Z+]+);base64,/);
+  if (dataUriMatch) {
+    mediaType = mediaType || dataUriMatch[1];
+    base64Data = rawBase64.slice(dataUriMatch[0].length);
+  }
+
+  if (!mediaType) {
+    mediaType = detectMediaTypeFromBytes(base64Data);
+  }
 
   const openaiKey = getOpenAiApiKey();
   if (!openaiKey) {
@@ -280,7 +325,7 @@ app.post("/api/food/analyze-image", async (req, res) => {
               { type: "input_text", text: "Estimate calories and protein from this meal image." },
               {
                 type: "input_image",
-                image_url: `data:image/jpeg;base64,${base64Image}`,
+                image_url: `data:${mediaType};base64,${base64Data}`,
               },
             ],
           },
@@ -313,6 +358,8 @@ app.post("/api/food/analyze-image", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`API server listening on http://localhost:${PORT}`);
+const HOST = process.env.HOST || "0.0.0.0";
+
+app.listen(PORT, HOST, () => {
+  console.log(`API server listening on http://${HOST}:${PORT}`);
 });

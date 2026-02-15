@@ -15,17 +15,14 @@ export function TopBar({
 }: TopBarProps) {
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.left}>
         <Text style={styles.logo}>Weekly</Text>
-        <Text style={styles.weekLabel}>{weekLabel}</Text>
       </View>
-      {onToggleDesktopMode ? (
-        <Pressable onPress={onToggleDesktopMode} style={styles.toggleBtn}>
-          <Text style={styles.toggleText}>
-            {desktopMode ? "Desktop On" : "Desktop Off"}
-          </Text>
-        </Pressable>
-      ) : null}
+      <View style={styles.right}>
+        <View style={styles.weekPill}>
+          <Text style={styles.weekLabel}>{weekLabel}</Text>
+        </View>
+      </View>
     </View>
   );
 }
@@ -34,34 +31,37 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.lg,
-    paddingBottom: spacing.md,
+    paddingBottom: spacing.sm,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
+  left: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    gap: spacing.sm,
+  },
   logo: {
     fontFamily: fonts.serifItalic,
-    fontSize: 28,
+    fontSize: 26,
     color: colors.accent,
     letterSpacing: -0.5,
   },
-  weekLabel: {
-    fontFamily: fonts.sans,
-    fontSize: 11,
-    color: colors.textMuted,
-    marginTop: -2,
+  right: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
   },
-  toggleBtn: {
+  weekPill: {
+    backgroundColor: colors.accentSoft,
     borderRadius: 999,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.bgInput,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
   },
-  toggleText: {
+  weekLabel: {
     fontFamily: fonts.mono,
     fontSize: 10,
-    color: colors.textMid,
+    color: colors.accent,
+    letterSpacing: 0.3,
   },
 });

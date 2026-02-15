@@ -6,6 +6,7 @@
     "start": "expo start",
     "dev:web": "expo start --web --port 8081",
     "dev:api": "node server/index.js",
+    "dev:preview": "sh scripts/preview.sh",
     "sync:github": "powershell -ExecutionPolicy Bypass -File scripts/sync-github.ps1",
     "android": "expo start --android",
     "ios": "expo start --ios",

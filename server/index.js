@@ -82,7 +82,7 @@ app.get("/api/health", (_req, res) => {
 
 app.get("/api/hevy/connect-url", (_req, res) => {
   res.json({
-    url: "https://hevy.com/settings?developer",
+    url: "https://www.hevyapp.com/settings?developer",
     mode: "env-api-key",
   });
 });
